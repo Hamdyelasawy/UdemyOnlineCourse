@@ -1,0 +1,340 @@
+
+SPI_BDriver.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000178  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000012  00800060  00800060  000001ec  2**0
+                  ALLOC
+  2 .comment      00000030  00000000  00000000  000001ec  2**0
+                  CONTENTS, READONLY
+  3 .debug_aranges 00000078  00000000  00000000  0000021c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   0000048a  00000000  00000000  00000294  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 00000183  00000000  00000000  0000071e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   0000020c  00000000  00000000  000008a1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  000001ac  00000000  00000000  00000ab0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    000005e8  00000000  00000000  00000c5c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    0000049d  00000000  00000000  00001244  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000058  00000000  00000000  000016e1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   8:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3e 00 	jmp	0x7c	; 0x7c <__vector_13>
+  38:	0c 94 90 00 	jmp	0x120	; 0x120 <__vector_14>
+  3c:	0c 94 67 00 	jmp	0xce	; 0xce <__vector_15>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a2 37       	cpi	r26, 0x72	; 114
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 b9 00 	call	0x172	; 0x172 <main>
+  74:	0c 94 ba 00 	jmp	0x174	; 0x174 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <__vector_13>:
+}
+
+
+void USART_Init(void)
+{
+	unsigned char UCSRA_Temp=0;
+  7c:	1f 92       	push	r1
+	
+	switch (UART0.CommunicationMode)
+	{
+		case USART_Async_NormalSpeed:
+		     UBRR_Temp = (((float)F_CPU) / (16.0 * UART0.BaudRate)) - 0.5;
+		break;
+  7e:	0f 92       	push	r0
+		case USART_Async_DoubleSpeed:
+			 UCSRA_Temp |= (1<<U2X);
+			 UBRR_Temp = (((float)F_CPU) / (8.0 * UART0.BaudRate)) - 0.5;
+  80:	0f b6       	in	r0, 0x3f	; 63
+  82:	0f 92       	push	r0
+  84:	11 24       	eor	r1, r1
+  86:	2f 93       	push	r18
+  88:	3f 93       	push	r19
+  8a:	4f 93       	push	r20
+  8c:	5f 93       	push	r21
+  8e:	6f 93       	push	r22
+  90:	7f 93       	push	r23
+  92:	8f 93       	push	r24
+  94:	9f 93       	push	r25
+  96:	af 93       	push	r26
+  98:	bf 93       	push	r27
+  9a:	ef 93       	push	r30
+  9c:	ff 93       	push	r31
+  9e:	e0 91 6c 00 	lds	r30, 0x006C
+  a2:	f0 91 6d 00 	lds	r31, 0x006D
+  a6:	30 97       	sbiw	r30, 0x00	; 0
+  a8:	09 f0       	breq	.+2      	; 0xac <__vector_13+0x30>
+  aa:	09 95       	icall
+  ac:	ff 91       	pop	r31
+  ae:	ef 91       	pop	r30
+  b0:	bf 91       	pop	r27
+  b2:	af 91       	pop	r26
+  b4:	9f 91       	pop	r25
+  b6:	8f 91       	pop	r24
+  b8:	7f 91       	pop	r23
+  ba:	6f 91       	pop	r22
+  bc:	5f 91       	pop	r21
+  be:	4f 91       	pop	r20
+
+void USART_Init(void)
+{
+	unsigned char UCSRA_Temp=0;
+	unsigned char UCSRB_Temp=0;
+	unsigned char UCSRC_Temp=0;
+  c0:	3f 91       	pop	r19
+	{
+		case USART_Async_NormalSpeed:
+		     UBRR_Temp = (((float)F_CPU) / (16.0 * UART0.BaudRate)) - 0.5;
+		break;
+		case USART_Async_DoubleSpeed:
+			 UCSRA_Temp |= (1<<U2X);
+  c2:	2f 91       	pop	r18
+			 UBRR_Temp = (((float)F_CPU) / (8.0 * UART0.BaudRate)) - 0.5;
+		break;
+  c4:	0f 90       	pop	r0
+		case USART_Sync:
+		     UCSRC_Temp |= (1<<UMSEL);
+			 UBRR_Temp = (((float)F_CPU) / (2.0 * UART0.BaudRate)) - 0.5;
+  c6:	0f be       	out	0x3f, r0	; 63
+  c8:	0f 90       	pop	r0
+  ca:	1f 90       	pop	r1
+  cc:	18 95       	reti
+
+000000ce <__vector_15>:
+  ce:	1f 92       	push	r1
+  d0:	0f 92       	push	r0
+  d2:	0f b6       	in	r0, 0x3f	; 63
+  d4:	0f 92       	push	r0
+  d6:	11 24       	eor	r1, r1
+  d8:	2f 93       	push	r18
+  da:	3f 93       	push	r19
+  dc:	4f 93       	push	r20
+  de:	5f 93       	push	r21
+  e0:	6f 93       	push	r22
+  e2:	7f 93       	push	r23
+  e4:	8f 93       	push	r24
+  e6:	9f 93       	push	r25
+  e8:	af 93       	push	r26
+  ea:	bf 93       	push	r27
+  ec:	ef 93       	push	r30
+  ee:	ff 93       	push	r31
+  f0:	e0 91 6e 00 	lds	r30, 0x006E
+  f4:	f0 91 6f 00 	lds	r31, 0x006F
+  f8:	30 97       	sbiw	r30, 0x00	; 0
+  fa:	09 f0       	breq	.+2      	; 0xfe <__vector_15+0x30>
+  fc:	09 95       	icall
+  fe:	ff 91       	pop	r31
+ 100:	ef 91       	pop	r30
+			 switch (UART0.ClockPolarity)
+ 102:	bf 91       	pop	r27
+ 104:	af 91       	pop	r26
+ 106:	9f 91       	pop	r25
+ 108:	8f 91       	pop	r24
+		case USART_Async_DoubleSpeed:
+			 UCSRA_Temp |= (1<<U2X);
+			 UBRR_Temp = (((float)F_CPU) / (8.0 * UART0.BaudRate)) - 0.5;
+		break;
+		case USART_Sync:
+		     UCSRC_Temp |= (1<<UMSEL);
+ 10a:	7f 91       	pop	r23
+}
+
+
+void USART_Init(void)
+{
+	unsigned char UCSRA_Temp=0;
+ 10c:	6f 91       	pop	r22
+ 10e:	5f 91       	pop	r21
+	unsigned char UCSRB_Temp=0;
+	unsigned char UCSRC_Temp=0;
+	float UBRR_Temp=0;
+ 110:	4f 91       	pop	r20
+ 112:	3f 91       	pop	r19
+ 114:	2f 91       	pop	r18
+
+void USART_Init(void)
+{
+	unsigned char UCSRA_Temp=0;
+	unsigned char UCSRB_Temp=0;
+	unsigned char UCSRC_Temp=0;
+ 116:	0f 90       	pop	r0
+}
+
+
+void USART_Init(void)
+{
+	unsigned char UCSRA_Temp=0;
+ 118:	0f be       	out	0x3f, r0	; 63
+ 11a:	0f 90       	pop	r0
+			 switch (UART0.ClockPolarity)
+			 {
+				 case USART_SampleOnFalling:
+				 break;
+				 case USART_SampleOnRising:
+				  UCSRC_Temp |= (1<<UCPOL);
+ 11c:	1f 90       	pop	r1
+}
+
+
+void USART_Init(void)
+{
+	unsigned char UCSRA_Temp=0;
+ 11e:	18 95       	reti
+
+00000120 <__vector_14>:
+			 }
+		break;
+		default:
+		break;
+	}
+	switch(UART0.CommunicationTerminal)
+ 120:	1f 92       	push	r1
+ 122:	0f 92       	push	r0
+ 124:	0f b6       	in	r0, 0x3f	; 63
+ 126:	0f 92       	push	r0
+	{
+		case USART_SingleProcessor:
+		break;
+		case USART_MultiProcessor:
+		     UCSRA_Temp |= (1<<MPCM);
+ 128:	11 24       	eor	r1, r1
+		break;
+		default:
+		break;
+	}
+	
+	switch(UART0.InterruptSource)
+ 12a:	2f 93       	push	r18
+ 12c:	3f 93       	push	r19
+ 12e:	4f 93       	push	r20
+ 130:	5f 93       	push	r21
+ 132:	6f 93       	push	r22
+ 134:	7f 93       	push	r23
+ 136:	8f 93       	push	r24
+ 138:	9f 93       	push	r25
+ 13a:	af 93       	push	r26
+ 13c:	bf 93       	push	r27
+ 13e:	ef 93       	push	r30
+ 140:	ff 93       	push	r31
+	{
+		case USART_InterruptDisable:
+		break;
+		case USART_RxComp_Enable:
+		     UCSRB_Temp |= (1<<RXCIE);
+ 142:	e0 91 70 00 	lds	r30, 0x0070
+		break;
+		case USART_TxComp_Enable:
+		     UCSRB_Temp |= (1<<TXCIE);
+ 146:	f0 91 71 00 	lds	r31, 0x0071
+		break;
+		case USART_UDREmpty_Enable:
+		     UCSRB_Temp |= (1<<UDRE);
+ 14a:	30 97       	sbiw	r30, 0x00	; 0
+		break;
+ 14c:	09 f0       	breq	.+2      	; 0x150 <__vector_14+0x30>
+		case USART_RxComp_TxComp_Enable:
+			UCSRB_Temp |= (1<<TXCIE) | (1<<RXCIE);
+ 14e:	09 95       	icall
+		break;
+ 150:	ff 91       	pop	r31
+		case USART_RxComp_UDREmpty_Enable:
+		    UCSRB_Temp |= (1<<UDRE) | (1<<RXCIE);
+ 152:	ef 91       	pop	r30
+		break;
+ 154:	bf 91       	pop	r27
+		case USART_TxComp_UDREmpty_Enable:
+		    UCSRB_Temp |= (1<<UDRE) | (1<<TXCIE);
+ 156:	af 91       	pop	r26
+		break;
+ 158:	9f 91       	pop	r25
+		case USART_RxComp_TxComp_UDREmpty_Enable:
+		    UCSRB_Temp |= (1<<UDRE) | (1<<TXCIE) | (1<<RXCIE);
+ 15a:	8f 91       	pop	r24
+		break;
+		default:
+		break;
+	}
+	
+	switch(UART0.DataFrame)
+ 15c:	7f 91       	pop	r23
+ 15e:	6f 91       	pop	r22
+ 160:	5f 91       	pop	r21
+ 162:	4f 91       	pop	r20
+ 164:	3f 91       	pop	r19
+ 166:	2f 91       	pop	r18
+ 168:	0f 90       	pop	r0
+ 16a:	0f be       	out	0x3f, r0	; 63
+ 16c:	0f 90       	pop	r0
+ 16e:	1f 90       	pop	r1
+ 170:	18 95       	reti
+
+00000172 <main>:
+
+
+#include <avr/io.h>
+
+int main(void)
+{
+ 172:	ff cf       	rjmp	.-2      	; 0x172 <main>
+
+00000174 <_exit>:
+ 174:	f8 94       	cli
+
+00000176 <__stop_program>:
+	{
+		case USART_5bitData:
+		break;
+		case USART_6bitData:
+		     UCSRC_Temp |= (1<<UCSZ0);
+ 176:	ff cf       	rjmp	.-2      	; 0x176 <__stop_program>
